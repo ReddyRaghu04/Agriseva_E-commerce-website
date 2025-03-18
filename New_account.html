@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,7 +84,6 @@
     </div>
 
     <script>
-
         function Next() {
             document.getElementById('Personal').style.display = "none";
             document.getElementById('business').style.display = "block";
@@ -103,109 +101,3 @@
     </script>
 </body>
 </html>
-=======
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Seller Registration</title>
-</head>
-<body>
-    <div id="Personal" style="text-align: center;">
-        <form>
-            <h3>Personal Details</h3>
-            <label>Full Name of the Seller</label><br>
-            <input type="text"><br>
-            <label>Date of Birth</label><br>
-            <input type="date"><br>
-
-            <label>State</label><br>
-            <select id="state">
-                <option value="">--Select State--</option>
-                <option value="telangana">Telangana</option>
-                <option value="andhra_pradesh">Andhra Pradesh</option>
-                <option value="gujarat">Gujarat</option>
-            </select><br>
-            
-            <label>Mobile No</label><br>
-            <input type="number"><br>
-            <label>Aadhaar No</label><br>
-            <input type="number"><br>
-            <label>Email</label><br>
-            <input type="email"><br>
-            <br>
-            <button onclick="Next()" type="button">Next</button>
-        </form>
-    </div>
-
-    <div id="business" style="display: none; text-align: center;">
-        <form>
-            <h3>Business Details</h3><br>
-            <label>Company/Shop Name</label> <br>
-            <input type="text"> <br>
-            <label>Address</label> <br>
-            <input type="text"> <br>
-            <label>Mobile No</label> <br>
-            <input type="number"> <br>
-            <label>Business Email ID</label> <br>
-            <input type="email"> <br>
-            <label>Categories of Products</label><br>
-            <input type="radio" name="cat"> <label>Seeds</label><br>
-            <input type="radio" name="cat"> <label>Fertilizers</label><br>
-            <input type="radio" name="cat"> <label>Pesticides</label><br>
-            <label>GST Number</label><br>
-            <input type="text"><br>
-            <label>PAN Card No</label><br>
-            <input type="text"><br>
-            <br>
-            <button type="button" onclick="NextBusiness()">Next</button>
-        </form>
-    </div>
-
-    <div id="bank" style="display: none; text-align: center;">
-        <form>
-            <h3>Bank Details</h3>
-            <label>Bank Account Holder Name</label><br>
-            <input type="text"><br>
-            <label>Bank Account Number</label><br>
-            <input type="number"><br>
-            <label>Bank Name</label><br>
-            <input type="text"><br>
-            <label>IFSC Code</label><br>
-            <input type="text"><br>
-            <br>
-            <button type="button" onclick="NextBank()">Next</button>
-        </form>
-    </div>
-
-    <div id="documents" style="display: none; text-align: center;">
-        <form>
-            <h3>Upload Documents</h3>
-            <label>GST Registration Certificate</label><br>
-            <input type="file"><br>
-            <label>Trade License</label><br>
-            <input type="file"><br>
-            <label>Seed Dealer License</label><br>
-            <input type="file"><br>
-        </form>
-    </div>
-
-    <script>
-
-        function Next() {
-            document.getElementById('Personal').style.display = "none";
-            document.getElementById('business').style.display = "block";
-        }
-
-        function NextBusiness() {
-            document.getElementById('business').style.display = "none";
-            document.getElementById('bank').style.display = "block";
-        }
-
-        function NextBank() {
-            document.getElementById('bank').style.display = "none";
-            document.getElementById('documents').style.display = "block";
-        }
-    </script>
-</body>
-</html>
->>>>>>> master
