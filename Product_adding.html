@@ -8,15 +8,58 @@
     <body>
         <div>
             <form>
-                <label>Seller Id</label>
+                <label>Seller Id</label><br>
+                <input type="number"><br>
+                <label>Seller Full Name</label><br>
+                <input type="text"><br>
+                <label>Product Name</label><br>
+                <input type="text"><br>
+                <label>Product description</label><br>
+                <input type="text" placeholder="Plaese give detailed description minimum 5 lines"><br>
+                <label>Upload image of Product</label><br>
+                <input type="file"><br>
+                This image will display to the customer<br>
+                <label>Unit of Measurement</label><br>
+                <select id="units" onchange="update_quantity()">
+                    <option>--Select--</option>
+                    <option>Kgs</option>
+                    <option>Liters</option>
+                    <option>Packets</option>
+                </select><br>
+                <label>Available Quantity Options</label><br>
+                <select id="quantity">
+                    <option>--select--</option>
+
+                </select>
+                <label>Price per Unit</label><br>
                 <input type="number">
-                <label>Seller Full Name</label>
-                <input type="text">
-                <label>Product Name</label>
-                <input type="text">
-                <label>Product description</label>
-                <input type="text">
             </form>
         </div>
     </body>
+    <script>
+        function update_quantity(){
+            var unit=document.getElementById('units').value
+            var quantity=document.getElementById('quantity')
+
+            quantity.innerHTML = "<option>--Select--</option>"
+
+            var options = [];
+            if (unit === "Kgs") {
+                options = ["5 Kg", "10 Kg", "20 Kg", "50 Kg", "100 Kg"];
+            } 
+            else if (unit === "Liters") {
+                options = ["5 L", "10 L", "20 L", "50 L", "100 L"];
+            } 
+            else if (unit === "Packets") {
+                options = ["1 Packet", "5 Packets", "10 Packets", "20 Packets"];
+            }
+        
+        options.forEach(function(value) {
+            var option = document.createElement("option");
+            option.text = value;
+            quantity.appendChild(option);
+        });
+    }
+
+    </script>
 </html>

@@ -5,9 +5,9 @@
 </head>
 <body>
     <div id="create">
-        <a href="New_account.html">
+        <a href="New_account.php">
         <button>Create New Account</button> </a>
-        <a href="Login.html">
+        <a href="Login.php">
         <button>Login</button> </a>
     </div>
 </body>

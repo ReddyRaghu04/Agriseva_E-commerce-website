@@ -3,6 +3,8 @@
         <title>
             Agriseva
         </title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     </head>
     <body>
         <div style="text-align: center; background-image: url('agriseva_bg_image.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 150px; background-size: cover;">
@@ -10,8 +12,8 @@
         </div>
         <br>
         <div>
-            <a href="seller.html">
-                <button style="background-color: rgb(135, 197, 135);">Seller</button>
+            <a href="seller.php">
+                <button  class="btn btn-success" >Seller</button>
             </a>
         </div>
     </body>
