@@ -1,17 +1,5 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "seller registration"; 
-
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
+include 'DB_connection.php';
 // Check if form was submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Personal details
