@@ -1,13 +1,16 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "seller registration"; 
+$dbname = "seller registration"; // Change to your actual database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
 if ($conn->connect_error) {
-    die("<script>alert('Connection failed: " . $conn->connect_error . "');</script>");
+    die("Connection failed: " . $conn->connect_error);
 }
+?>

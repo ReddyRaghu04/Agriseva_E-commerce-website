@@ -2,17 +2,19 @@
 session_start();
 include 'DB_connection.php';
 
-// Check if form is submitted
+header('Content-Type: application/json'); // Ensure JSON response
+header('Access-Control-Allow-Origin: *'); // Allow external requests if needed
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $seller_id = $_POST['id'] ?? '';
     $password = $_POST['psw'] ?? '';
 
     if (empty($seller_id) || empty($password)) {
-        echo "<script>alert('Both fields are required'); window.location.href='login.html';</script>";
+        echo json_encode(["status" => "error", "message" => "Both fields are required!"]);
         exit;
     }
 
-    // Retrieve password from DB
+    
     $stmt = $conn->prepare("SELECT password FROM seller_auth WHERE seller_id = ?");
     $stmt->bind_param("i", $seller_id);
     $stmt->execute();
@@ -22,15 +24,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_result($db_password);
         $stmt->fetch();
 
-        // Check plain text password
+
         if ($password === $db_password) {
             $_SESSION["seller_id"] = $seller_id;
-            echo "<script> window.location.href='sellers_dashboard.php';</script>";
+            echo json_encode(["status" => "success", "message" => "Login successful!", "redirect" => "sellers_dashboard.php"]);
         } else {
-            echo "<script>window.location.href='Login.php';</script>";
+            echo json_encode(["status" => "error", "message" => "Incorrect password!"]);
         }
     } else {
-        echo "<script>window.location.href='Login.php';</script>";
+        echo json_encode(["status" => "error", "message" => "Seller ID not found!"]);
     }
 
     $stmt->close();

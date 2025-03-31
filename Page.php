@@ -35,9 +35,9 @@
         }
         .seed-options {
             display: none;
-            flex-direction: column; /* Stack buttons vertically */
+            flex-direction: column;
             gap: 5px;
-            margin-left: 20px; /* Indent for better visibility */
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -50,9 +50,7 @@
     <div class="container my-4">
         <div class="d-flex justify-content-between">
             <button class="btn btn-primary" onclick="toggleCategoryOptions()">Select Category</button>
-            <a href="Login.php">
-                <button class="btn btn-success">Seller</button>
-            </a>
+            <a href="Login.php"><button class="btn btn-success">Seller</button></a>
         </div>
 
         <div class="mt-3">
@@ -68,7 +66,7 @@
 
         <h2 class="text-center">Available Products</h2>
         <div class="row" id="product-list">
-            <!-- Products will be loaded here via JavaScript -->
+            <!-- Products will be dynamically loaded here -->
         </div>
     </div>
 
@@ -83,7 +81,7 @@
             seedOptions.style.display = seedOptions.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        // Fetch products from PHP backend
+        // Fetch products from backend
         fetch('fetch_php.php')
             .then(response => response.json())
             .then(data => {
@@ -94,22 +92,37 @@
                     return;
                 }
 
-                data.forEach(product => { 
-                    let productCard = `
-                        <div class="col-md-4">
-                            <div class="card product-card">
-                                <img src="${product.image}" class="card-img-top product-image" 
-                                    onerror="this.onerror=null; this.src='uploads/default.jpg';" 
-                                        alt="Product Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">${product.product_name}</h5>
-                                    <p class="card-text">${product.description.substring(0, 100)}...</p>
-                                    <p class="card-text"><strong>Price:</strong> ₹${product.price}</p>
-                                    <button class="btn text-white" style="background-color: #fd7e14;">BUY</button>
-                                </div>
+                data.forEach(product => {
+                    let discount = product.previous_price && product.previous_price > product.price
+                        ? Math.round(((product.previous_price - product.price) / product.previous_price) * 100)
+                        : 0;
+
+                    let card = document.createElement('div');
+                    card.className = 'col-md-4';
+                    card.innerHTML = `
+                        <div class="card product-card">
+                            <img src="${product.image}" class="card-img-top product-image" 
+                                onerror="this.onerror=null; this.src='uploads/default.jpg';" 
+                                alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.product_name}</h5>
+                                <p class="card-text">${product.description.substring(0, 100)}...</p>
+                                
+                                ${product.previous_price && product.previous_price > product.price ? `
+                                    <p class="text-danger">
+                                        <s>₹${parseFloat(product.previous_price).toFixed(2)}</s> → 
+                                        <b>₹${parseFloat(product.price).toFixed(2)}</b> 
+                                        <span class="badge bg-success">${discount}% OFF</span>
+                                    </p>` : `
+                                    <p><b>₹${parseFloat(product.price).toFixed(2)}</b></p>`
+                                }
+
+                                <p class="card-text"><strong>Quantity:</strong> ${product.quantity}</p>
+                                <button class="btn text-white" style="background-color: #fd7e14;">BUY</button>
                             </div>
                         </div>`;
-                    productList.innerHTML += productCard;
+                    
+                    productList.appendChild(card);
                 });
             })
             .catch(error => console.error('Error fetching products:', error));

@@ -37,10 +37,14 @@ if ($stmt) {
     <div class="container mt-4">
         <h2 class="text-center">Seller Dashboard</h2>
 
-        <div class="text-end mb-3">
-            <a href="Product_adding.php" class="btn btn-success">Add Product</a>
-            <a href="dashboard_logout.php" class="btn btn-danger">Logout</a>
+        <div class="d-flex justify-content-between mb-3">
+            <a href="Page.php" class="btn btn-primary">Home</a>
+            <div>
+                <a href="Product_adding.php" class="btn btn-success">Add Product</a>
+                <a href="dashboard_logout.php" class="btn btn-danger">Logout</a>
+            </div>
         </div>
+
 
         <h3>My Products</h3>
         <table class="table table-bordered">
@@ -48,6 +52,7 @@ if ($stmt) {
                 <tr>
                     <th>Product Name</th>
                     <th>Description</th>
+                    <th>Quantity</th>
                     <th>Price (₹)</th>
                     <th>Image</th>
                     <th>Actions</th>
@@ -58,10 +63,11 @@ if ($stmt) {
                     <tr>
                         <td><?php echo htmlspecialchars($row['product_name']); ?></td>
                         <td><?php echo htmlspecialchars($row['description']); ?></td>
+                        <td><?php echo htmlspecialchars($row['quantity']);?></td>
                         <td><?php echo htmlspecialchars($row['price']); ?></td>
                         <td><img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Product Image" width="100"></td>
                         <td>
-                            <a href="edit_product.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="Product_update.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Update</a>
                         </td>
                     </tr>
                 <?php } ?>
