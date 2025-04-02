@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <title>Login Page</title>
+        <link rel="icon" href="Agriseva_icon.png" type="image/png">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            form {
+                background:white;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                margin: 50px auto;
+                text-align: center;
+                
+            }
+            input {
+            width: 60%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+           }
+           body{
+            background-color: aquamarine;
+           }
+           
+        </style>
+    </head>
+    <body>
+        <div id="loginForm">
+            <!-- Login Form -->
+            <div id="errorMessage"></div>
+
+            <form id="loginform" onsubmit="handleLogin(event)">
+                <h3>Login</h3>
+                <label>Username</label><br>
+                <input type="text" name="username"><br>
+                <label>Password</label><br>
+                <input type="password" name="password"><br>
+                <br>
+                <button class="btn btn-success" type="submit">Login</button>
+                <br>
+                <p><a href="javascript:void(0);" onclick="showFg_Psw()">Forgot Password</a></p>
+                <p><a href="javascript:void(0);" onclick="showSignUpForm()">New User</a></p>
+            </form>
+        </div>
+
+        <div id="signupForm" style="display: none;">
+            <!-- Sign Up Form -->
+            <form id="signupFormData" action="user_signup_php_conn.php" method="post">
+                <h3>Sign Up</h3>
+                <label>Full Name</label><br>
+                <input type="text" name="full_name" required><br>
+                <label>Mobile No</label><br>
+                <input type="number" name="mobile_no" required><br>
+                <label>Username</label><br>
+                <input type="text" name="username" required><br>
+                <label>Email</label><br>
+                <input type="email" name="email" required><br>
+                <label>Password</label><br>
+                <input type="password" name="password" required><br>
+                <br>
+                <button type="submit" class="btn btn-success">Sign Up</button><br>
+                <p><a href="javascript:void(0);" onclick="showLoginForm()">Back to Login</a></p>
+            </form>
+        </div>
+        
+        <script>
+            document.getElementById("signupFormData").addEventListener("submit", function (event) {
+                event.preventDefault(); // Prevent default form submission
+        
+                let formData = new FormData(this);
+        
+                fetch("user_signup_php_conn.php", {
+                    method: "POST",
+                    body: formData
+                })
+                .then(response => response.text()) // First, get raw text to debug errors
+                .then(text => {
+                    console.log("Raw Response:", text); // Debugging log
+                    return JSON.parse(text); // Convert to JSON
+                })
+                .then(data => {
+                    alert(data.message); // Show alert
+                    if (data.status === "success") {
+                        window.location.href = "User_Login.html"; // Redirect to login
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            });
+        </script>
+        
+
+        <div id="fg_psd" style="display: none;">
+            <form>
+                <h3>Forgot Password</h3>
+                <label>Username</label><br>
+                <input type="text"><br>
+                <label>Email</label><br>
+                <input type="email"><br>
+                <br>
+                <button class="btn btn-warning">Reset Password</button><br>
+                <p><a href="javascript:void(0);" onclick="showLoginForm()">Back to Login</a></p>
+            </form>
+        </div>
+
+        <script>
+            function showSignUpForm() {
+                document.getElementById('loginForm').style.display = "none";
+                document.getElementById('signupForm').style.display = "block";
+                document.getElementById('fg_psd').style.display = "none";
+            }
+
+            function showLoginForm() {
+                document.getElementById('signupForm').style.display = "none";
+                document.getElementById('fg_psd').style.display = "none";
+                document.getElementById('loginForm').style.display = "block";
+            }
+
+            function showFg_Psw() {
+                document.getElementById('loginForm').style.display = "none";
+                document.getElementById('signupForm').style.display = "none";
+                document.getElementById('fg_psd').style.display = "block";
+            }
+            
+            function handleLogin(event) {
+    event.preventDefault(); // Prevent form from submitting normally
+
+    let form = document.getElementById("loginform"); // ✅ Ensure correct form selection
+    if (!(form instanceof HTMLFormElement)) {
+        console.error("Form not found! Check your HTML.");
+        return;
+    }
+
+    let formData = new FormData(form); // ✅ Create FormData correctly
+
+    fetch("user_login_php_conn.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        let msgBox = document.getElementById("errorMessage");
+        msgBox.innerHTML = `<div class="alert ${data.status === 'error' ? 'alert-danger' : 'alert-success'}">${data.message}</div>`;
+
+        if (data.status === "success") {
+            setTimeout(() => window.location.href = data.redirect, 1500);
+        }
+    })
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        document.getElementById("errorMessage").innerHTML = `<div class="alert alert-danger">Something went wrong! Try again.</div>`;
+    });
+}
+
+
+        </script>
+        
+    </body>
+</html>
