@@ -3,7 +3,7 @@ include 'DB_connection.php';
 
 header('Content-Type: application/json');
 
-$query = "SELECT product_name, description, image, price, previous_price, quantity FROM products_details"; // Added previous_price
+$query = "SELECT id,product_name, description, image, price, previous_price, quantity FROM products_details"; // Added previous_price
 $result = $conn->query($query);
 
 if (!$result) {
@@ -15,6 +15,7 @@ $products = [];
 
 while ($row = $result->fetch_assoc()) {
     // Ensure previous_price is numeric and exists
+    $row['id'] = (int) $row['id']; // Convert ID to integer
     $row['price'] = (float) $row['price'];
     $row['previous_price'] = isset($row['previous_price']) ? (float) $row['previous_price'] : null;
 

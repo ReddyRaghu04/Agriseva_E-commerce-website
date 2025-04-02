@@ -71,7 +71,7 @@ session_start();
                 <?= isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Guest'; ?>
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-                            <li><a class="dropdown-item" href="">
+                            <li><a class="dropdown-item" href="My_profile.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
                                 <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
                                 <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
@@ -84,7 +84,7 @@ session_start();
                             </svg>
                                 My Orders
                             </a></li>
-                            <li><a class="dropdown-item" href="">
+                            <li><a class="dropdown-item" href="fetch_cart.php">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
                                 <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
                             </svg>
@@ -196,8 +196,9 @@ session_start();
                                 }
 
                                 <p class="card-text"><strong>Quantity:</strong> ${product.quantity}</p>
-                                <button class="btn text-white" style="background-color: #fd7e14;">Buy Now</button>
-                                <button class="btn text-white" style="background-color:rgb(227, 227, 54);">Add to Cart</button>
+                                <button onclick="window.location.href='checkout_page.php'" class="btn text-white" style="background-color: #fd7e14;">Buy Now</button>
+                                <button class="btn text-white   add_to_cart" style="background-color:rgb(227, 227, 54);"  data-product-id="${product.id}">Add to Cart</button>
+                                
                             </div>
                         </div>`;
                     
@@ -206,6 +207,30 @@ session_start();
             })
             .catch(error => console.error('Error fetching products:', error));
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).on("click", ".add_to_cart", function(){
+                var productId = $(this).data("product-id");
+                console.log("Product ID Sent:", productId); // Debugging log
+                if (!productId) {
+                    alert("Error: Missing Product ID.");
+                    return;
+                }
+                $.ajax({
+                    url: "Add_to_cart.php",
+                    type: "POST",
+                    data: { product_id: productId },
+                    success: function(response) {
+                        console.log("Server Response:", response); // Debug response
+                        alert(response);
+                    },
+                    error: function() {
+                        alert("Failed to add to cart.");
+                    }
+                });
+            });
+
+        </script>
 
 </body>
 </html>
