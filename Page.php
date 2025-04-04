@@ -25,25 +25,22 @@ session_start();
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 20px;
+            margin-left:40px;
         }
         .product-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
-        .category-container {
-            display: none;
-            flex-direction: column;
-            align-items: start;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .seed-options {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            margin-left: 20px;
-        }
+       
+            #categoryDropdown,
+            #seedOptions {
+                display: none;
+                flex-direction: column; /* Force vertical stacking */
+                align-items: flex-start;
+            }
+       
+       
     </style>
 </head>
 <body>
@@ -51,16 +48,31 @@ session_start();
     <div class="header">
         <h1>Agriseva</h1>
     </div>
-
+    <nav class="navbar navbar-expand-lg sticky-top" style="background-color: rgb(76, 177, 71); height: 50px; padding: 5px 10px;">
     <div class="container my-4">
-        <div class="d-flex justify-content-between">
-            <button class="btn btn-primary" onclick="toggleCategoryOptions()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
-                </svg>
-                Select category
-            </button>
-            <div class="d-flex gap-2">
+        <div class="container my-4 d-flex justify-content-between align-items-center">
+            
+            <!-- Category Button -->
+            <div class="position-relative d-inline-block">
+                <button class="btn btn-primary" onclick="toggleCategoryOptions()" id="categoryBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                    </svg>
+                    Select Category
+                </button>
+
+                <!-- Dropdown -->
+                <div id="categoryDropdown" class="dropdown-menu show" style="display: none;">
+                    <button class="dropdown-item" onclick="toggleSeedOptions()">Seeds</button>
+                        <div id="seedOptions" style="display: none; padding-left: 1rem;">
+                            <button class="dropdown-item">Paddy Seeds</button>
+                            <button class="dropdown-item">Cotton Seeds</button>
+                        </div>
+                        <button class="dropdown-item">Insecticides</button>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end align-items-center gap-2">
                 <?php if (isset($_SESSION['username'])): ?>
                     <div class="dropdown">
                         <button class="btn btn-success dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -129,18 +141,10 @@ session_start();
 
             </div>
         </div>
+        </nav>
 
 
-        <div class="mt-3">
-            <div id="category-container" class="category-container">
-                <button class="btn btn-outline-primary" onclick="toggleSeedOptions()">Seeds</button>
-                <div id="seed-options" class="seed-options">
-                    <button class="btn btn-outline-success">Paddy Seeds</button>
-                    <button class="btn btn-outline-success">Cotton Seeds</button>
-                </div>
-                <button class="btn btn-outline-primary">Insecticides</button>
-            </div>
-        </div>
+        
 
         <h2 class="text-center">Available Products</h2>
         <div class="row" id="product-list">
@@ -148,89 +152,7 @@ session_start();
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script>
-        function toggleCategoryOptions() {
-            let categoryContainer = document.getElementById('category-container');
-            categoryContainer.style.display = categoryContainer.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        function toggleSeedOptions() {
-            let seedOptions = document.getElementById('seed-options');
-            seedOptions.style.display = seedOptions.style.display === 'flex' ? 'none' : 'flex';
-        }
-
-        // Fetch products from backend
-        fetch('fetch_php.php')
-            .then(response => response.json())
-            .then(data => {
-                let productList = document.getElementById('product-list');
-
-                if (data.length === 0) {
-                    productList.innerHTML = '<p class="text-center">No products available</p>';
-                    return;
-                }
-
-                data.forEach(product => {
-                    let discount = product.previous_price && product.previous_price > product.price
-                        ? Math.round(((product.previous_price - product.price) / product.previous_price) * 100)
-                        : 0;
-
-                    let card = document.createElement('div');
-                    card.className = 'col-md-4';
-                    card.innerHTML = `
-                        <div class="card product-card">
-                            <img src="${product.image}" class="card-img-top product-image" 
-                                onerror="this.onerror=null; this.src='uploads/default.jpg';" 
-                                alt="Product Image">
-                            <div class="card-body">
-                                <h5 class="card-title">${product.product_name}</h5>
-                                <p class="card-text">${product.description.substring(0, 100)}...</p>
-                                
-                                ${product.previous_price && product.previous_price > product.price ? `
-                                    <p class="text-danger">
-                                        <s>₹${parseFloat(product.previous_price).toFixed(2)}</s> → 
-                                        <b>₹${parseFloat(product.price).toFixed(2)}</b> 
-                                        <span class="badge bg-success">${discount}% OFF</span>
-                                    </p>` : `
-                                    <p><b>₹${parseFloat(product.price).toFixed(2)}</b></p>`
-                                }
-
-                                <p class="card-text"><strong>Quantity:</strong> ${product.quantity}</p>
-                                <button onclick="window.location.href='checkout_page.php'" class="btn text-white" style="background-color: #fd7e14;">Buy Now</button>
-                                <button class="btn text-white   add_to_cart" style="background-color:rgb(227, 227, 54);"  data-product-id="${product.id}">Add to Cart</button>
-                                
-                            </div>
-                        </div>`;
-                    
-                    productList.appendChild(card);
-                });
-            })
-            .catch(error => console.error('Error fetching products:', error));
-    </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
-            $(document).on("click", ".add_to_cart", function(){
-                var productId = $(this).data("product-id");
-                console.log("Product ID Sent:", productId); // Debugging log
-                if (!productId) {
-                    alert("Error: Missing Product ID.");
-                    return;
-                }
-                $.ajax({
-                    url: "Add_to_cart.php",
-                    type: "POST",
-                    data: { product_id: productId },
-                    success: function(response) {
-                        console.log("Server Response:", response); // Debug response
-                        alert(response);
-                    },
-                    error: function() {
-                        alert("Failed to add to cart.");
-                    }
-                });
-            });
-
-        </script>
-
+    <script src="Home_JS.js"></script>
 </body>
 </html>

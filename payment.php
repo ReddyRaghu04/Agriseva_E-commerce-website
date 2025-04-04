@@ -28,12 +28,12 @@ if (!isset($_SESSION['username'])) {
             <input type="radio" name="payment_method" value="UPI" class="form-check-input" id="upiOption">
             <label class="form-check-label">📲 UPI (Google Pay, PhonePe, Paytm)</label>
         </div>
-        <div id="upiSection" class="mt-3" style="display: none;">
+        <!--<div id="upiSection" class="mt-3" style="display: none;">
             <p>Scan the QR code or click the UPI link to pay:</p>
-            <img src="upi_qr.png" alt="UPI QR Code" width="200">
+            <img src="QR_code.JPG" alt="UPI QR Code" width="200">
             <br>
-            <a href="upi://pay?pa=your-upi-id@bank&pn=Your Name&mc=1234&tid=123456789&tr=order123&tn=Payment for Order&am=100&cu=INR" class="btn btn-primary mt-2">Pay via UPI</a>
-        </div>
+            <a href="" class="btn btn-primary mt-2">Pay via UPI</a>
+        </div>-->
 
         <div class="form-check">
             <input type="radio" name="payment_method" value="Card" class="form-check-input">
@@ -46,7 +46,7 @@ if (!isset($_SESSION['username'])) {
 
         <div id="qrCodeSection" class="mt-3" style="display: none;">
             <p>Scan the QR code below to complete the payment:</p>
-            <img src="qr_code.png" alt="QR Code" width="200">
+            <img src="QR_code.JPG" alt="QR Code" width="200">
         </div>
 
         <button type="submit" class="btn btn-success mt-3">Place Order</button>
