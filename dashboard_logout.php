@@ -1,6 +1,9 @@
 <?php
 session_start();
-session_destroy();
-header("Location: Page.php"); // Redirect to home page
+
+// Only unset the seller session variable
+unset($_SESSION['seller_id']);
+
+header("Location: Page.php");
 exit();
 ?>

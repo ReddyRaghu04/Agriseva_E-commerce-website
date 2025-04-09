@@ -67,6 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="form-label">Description</label>
                 <textarea name="description" class="form-control" required><?php echo htmlspecialchars($product['description']); ?></textarea>
             </div>
+            
             <div class="mb-3">
                 <label class="form-label">Price (₹)</label>
                 <input type="number" step="0.01" name="price" class="form-control" value="<?php echo htmlspecialchars($product['price']); ?>" required>

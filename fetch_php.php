@@ -3,7 +3,8 @@ include 'DB_connection.php';
 
 header('Content-Type: application/json');
 
-$query = "SELECT id,product_name, description, image, price, previous_price, quantity FROM products_details"; // Added previous_price
+// Full query including all necessary fields
+$query = "SELECT id, product_name, description, image, price, previous_price, quantity, category, subcategory FROM products_details";
 $result = $conn->query($query);
 
 if (!$result) {
@@ -14,16 +15,17 @@ if (!$result) {
 $products = [];
 
 while ($row = $result->fetch_assoc()) {
-    // Ensure previous_price is numeric and exists
-    $row['id'] = (int) $row['id']; // Convert ID to integer
-    $row['price'] = (float) $row['price'];
-    $row['previous_price'] = isset($row['previous_price']) ? (float) $row['previous_price'] : null;
-
-    // Fix: Remove extra spaces in filename (if any)
-    $row['image'] = trim($row['image']);
-    $row['image'] = str_replace(" ", "%20", $row['image']); 
-
-    $products[] = $row;
+    $products[] = [
+        'id' => (int)$row['id'],
+        'product_name' => $row['product_name'],
+        'description' => $row['description'],
+        'image' => str_replace(" ", "%20", trim($row['image'])),
+        'price' => (float)$row['price'],
+        'previous_price' => isset($row['previous_price']) ? (float)$row['previous_price'] : null,
+        'quantity' => $row['quantity'],
+        'category' => $row['category'] ?? '',
+        'subcategory' => $row['subcategory'] ?? ''
+    ];
 }
 
 $conn->close();

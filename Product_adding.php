@@ -57,10 +57,24 @@
                 <input type="text" name="seller_name"><br>
                 <label>Product Name</label><br>
                 <input type="text"  name="product_name" ><br>
+                <label>Product Category</label><br>
+                <select id="category" name="category" onchange="showSubCategory()">
+                    <option value="">--Select Category--</option>
+                    <option value="seeds">Seeds</option>
+                    <option value="insecticides">Insecticides</option>
+                </select><br>
+                <div id="seedsSubCategory"  style="display: none;">
+                    <label>Seed Type</label><br>
+                    <select name="subcategory">
+                        <option>--Select Type--</option>
+                        <option>Paddy Seeds</option>
+                        <option>Cotton Seeds</option>
+                    </select>
+                </div>
                 <label>Product description</label><br>
                 <input type="text" name="product_description" placeholder="Plaese give detailed description minimum 5 lines"><br>
                 <label>Upload image of Product</label><br>
-                <input type="file"  name="product_image"><br>
+                <input type="file" name="product_image" accept="image/*"><br>
                 This image will display to the customer<br>
                 <label>Unit of Measurement</label><br>
                 <select id="units"  name="unit" onchange="update_quantity()">
@@ -107,4 +121,16 @@
     }
 
     </script>
+    <script>
+function showSubCategory() {
+    var category = document.getElementById("category").value;
+    var subCategoryDiv = document.getElementById("seedsSubCategory");
+    
+    if (category === "seeds") {
+        subCategoryDiv.style.display = "block";
+    } else {
+        subCategoryDiv.style.display = "none";
+    }
+}
+</script>
 </html>

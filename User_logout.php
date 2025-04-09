@@ -1,13 +1,10 @@
 <?php
 session_start();
 
-// Destroy all session variables
-session_unset();
+// Only unset the user session variable
+unset($_SESSION['username']);
 
-// Destroy the session itself
-session_destroy();
-
-// Redirect to the login page (or any page you prefer)
+// Optionally: redirect to homepage or user login page
 header("Location: Page.php");
 exit();
 ?>
