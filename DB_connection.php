@@ -6,7 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "seller registration"; // Change to your actual database name
+$dbname = "agriseva"; // Change to your actual database name
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

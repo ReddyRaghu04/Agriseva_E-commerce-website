@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Login Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="icon" href="Agriseva_icon.png" type="image/png">
 
   <!-- Bulma CSS -->
@@ -16,34 +18,98 @@
 
   <style>
     body {
-      background-color: aquamarine;
+      background: linear-gradient(to right, #74ebd5, #9face6);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-
+  
     form {
-      background: hwb(0 98% 2%);
-      padding: 30px;
-      border-radius: 8px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      max-width: 400px;
-      margin: 50px auto;
+      background: #fff;
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      margin: 60px auto;
       text-align: center;
+      transition: all 0.3s ease-in-out;
     }
-
+  
     .input {
       width: 100%;
+      border-radius: 8px;
+      transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     }
-
+  
+    .input:focus {
+      border-color: #48c774;
+      box-shadow: 0 0 5px #48c77488;
+    }
+  
+    .button {
+      border-radius: 8px;
+      transition: all 0.2s ease-in-out;
+    }
+  
+    .button:hover {
+      transform: scale(1.02);
+    }
+  
     #toastContainer {
       position: fixed;
-      top: 25px;
-      margin-left: 450px;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 9999;
+      font-size: 14px;
     }
-
+  
     .is-clickable {
       cursor: pointer;
     }
+  
+    .icon.is-clickable:hover {
+      color: #48c774;
+    }
+  
+    .help.is-danger {
+      color: #f14668;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      text-align: left;
+    }
+  
+    .help.is-success {
+      color: #48c774;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      text-align: left;
+    }
+  
+    .section {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  
+    .title {
+      color: #363636;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+  
+    .field {
+      margin-bottom: 1.25rem;
+    }
   </style>
+  
 </head>
 <body>
 
@@ -93,32 +159,38 @@
 
     <div class="field">
       <label class="label">Full Name</label>
-      <input class="input" type="text" name="full_name" required>
+      <input class="input" type="text" name="full_name" required oninput="validateField(this)">
+      <p class="help is-danger" id="error_full_name"></p>
     </div>
 
     <div class="field">
       <label class="label">Mobile No</label>
-      <input class="input" type="tel" name="mobile_no" maxlength="10" required>
+      <input class="input" type="tel" name="mobile_no" maxlength="10" required oninput="validateField(this)">
+      <p class="help is-danger" id="error_mobile_no"></p>
     </div>
 
     <div class="field">
       <label class="label">Username</label>
-      <input class="input" type="text" name="username" required>
+      <input class="input" type="text" name="username" required oninput="validateField(this)">
+      <p class="help is-danger" id="error_username"></p>
     </div>
 
     <div class="field">
-        <label class="label" for="pwd">Password</label>
-        <div class="control has-icons-right">
-          <input class="input" type="password" name="password" id="pwd" required>
-          <span class="icon is-small is-right is-clickable" id="toggleEye">
-            <i class="fas fa-eye" id="eyeIcon"></i>
-          </span>
-        </div>
-    </div>
-    <div class="field">
-        <label class="label">Email</label>
-        <input class="input" type="email" name="email" required>
+      <label class="label">Password</label>
+      <div class="control has-icons-right">
+        <input class="input" type="password" name="password" id="signupPwd" required oninput="validateField(this)">
+        <span class="icon is-small is-right is-clickable" id="signupToggleEye">
+          <i class="fas fa-eye" id="signupEyeIcon"></i>
+        </span>
       </div>
+      <p class="help is-danger" id="error_password"></p>
+    </div>
+
+    <div class="field">
+      <label class="label">Email</label>
+      <input class="input" type="email" name="email" required oninput="validateField(this)">
+      <p class="help is-danger" id="error_email"></p>
+    </div>
 
     <div class="field has-text-centered">
       <button class="button is-success is-fullwidth" type="submit">Sign Up</button>
@@ -130,21 +202,23 @@
 
 <!-- FORGOT PASSWORD FORM -->
 <div id="fg_psd" class="section" style="display: none;">
-  <form>
+  <form id="forgotPasswordForm">
     <h3 class="title is-4 has-text-centered">Forgot Password</h3>
 
     <div class="field">
       <label class="label">Username</label>
-      <input class="input" type="text">
+      <input class="input" type="text" name="username" required>
+      <p class="help is-danger" id="error_fp_username"></p>
     </div>
 
     <div class="field">
       <label class="label">Email</label>
-      <input class="input" type="email">
+      <input class="input" type="email" name="email" required oninput="validateForgotField(this)">
+      <p class="help is-danger" id="error_fp_email"></p>
     </div>
 
     <div class="field has-text-centered">
-      <button class="button is-warning is-fullwidth">Reset Password</button>
+      <button class="button is-warning is-fullwidth" type="submit">Reset Password</button>
     </div>
 
     <p class="has-text-centered"><a href="javascript:void(0);" onclick="showLoginForm()">Back to Login</a></p>
@@ -156,7 +230,169 @@
 
 <!-- SCRIPT -->
 <script>
-  // Toggle password visibility
+  // Real-time field validation
+  function validateField(field) {
+    const name = field.name;
+    const value = field.value.trim();
+    const errorElement = document.getElementById(`error_${name}`);
+    
+    if (!errorElement) return;
+    
+    let isValid = true;
+    let errorMessage = "";
+    
+    switch (name) {
+      case 'full_name':
+        if (value.length === 0) {
+          errorMessage = "";  // Don't show error when empty
+        } else if (value.length < 2) {
+          errorMessage = "Full name must be at least 2 characters";
+          isValid = false;
+        }
+        break;
+        
+      case 'mobile_no':
+        if (value.length === 0) {
+          errorMessage = "";  // Don't show error when empty
+        } else if (!/^\d+$/.test(value)) {
+          errorMessage = "Mobile number must contain only digits";
+          isValid = false;
+        } else if (value.length !== 10) {
+          errorMessage = "Mobile number must be exactly 10 digits";
+          isValid = false;
+        }
+        break;
+        
+      case 'username':
+        if (value.length === 0) {
+          errorMessage = "";  // Don't show error when empty
+        } else if (value.length < 3) {
+          errorMessage = "Username must be at least 3 characters";
+          isValid = false;
+        } else {
+          // Optional: Check username availability
+          if (value.length >= 3) {
+            checkUsernameAvailability(value, errorElement);
+          }
+        }
+        break;
+        
+      case 'password':
+        if (value.length === 0) {
+          errorMessage = "";  // Don't show error when empty
+        } else if (value.length < 6) {
+          errorMessage = "Password must be at least 6 characters";
+          isValid = false;
+        }
+        break;
+        
+      case 'email':
+        if (value.length === 0) {
+          errorMessage = "";  // Don't show error when empty
+        } else if (!/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+          errorMessage = "Invalid email format";
+          isValid = false;
+        }
+        break;
+    }
+    
+    // Update error message display
+    errorElement.textContent = errorMessage;
+    
+    // Optionally change input border color based on validation
+    if (value.length > 0) {
+      if (isValid) {
+        field.classList.remove("is-danger");
+        field.classList.add("is-success");
+      } else {
+        field.classList.remove("is-success");
+        field.classList.add("is-danger");
+      }
+    } else {
+      field.classList.remove("is-success", "is-danger");
+    }
+    
+    return isValid;
+  }
+  
+  // Also validate forgot password fields
+  function validateForgotField(field) {
+    const name = field.name;
+    const value = field.value.trim();
+    const errorElement = document.getElementById(`error_fp_${name}`);
+    
+    if (!errorElement) return;
+    
+    let errorMessage = "";
+    let isValid = true;
+    
+    if (name === 'email' && value.length > 0) {
+      if (!/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(value)) {
+        errorMessage = "Invalid email format";
+        isValid = false;
+      }
+    }
+    
+    errorElement.textContent = errorMessage;
+    
+    if (value.length > 0) {
+      if (isValid) {
+        field.classList.remove("is-danger");
+        field.classList.add("is-success");
+      } else {
+        field.classList.remove("is-success");
+        field.classList.add("is-danger");
+      }
+    } else {
+      field.classList.remove("is-success", "is-danger");
+    }
+    
+    return isValid;
+  }
+  
+  // Function to check username availability (simulated)
+  function checkUsernameAvailability(username, errorElement) {
+    // This simulates an API call - in production you would make an actual AJAX request
+    // Uncomment the fetch call below and replace with your actual endpoint
+    
+    /*
+    fetch(`check_username.php?username=${encodeURIComponent(username)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.exists) {
+          errorElement.textContent = "Username already taken";
+          errorElement.classList.remove("is-success");
+          errorElement.classList.add("is-danger");
+        } else {
+          errorElement.textContent = "Username available";
+          errorElement.classList.remove("is-danger");
+          errorElement.classList.add("is-success");
+        }
+      })
+      .catch(error => {
+        console.error("Error checking username:", error);
+      });
+    */
+    
+    // Simulated response for demo purposes (remove in production)
+    setTimeout(() => {
+      // 30% chance username is taken for demonstration
+      const isTaken = Math.random() < 0.3;
+      
+      if (isTaken) {
+        errorElement.textContent = "Username already taken";
+        errorElement.classList.remove("is-success");
+        document.querySelector('input[name="username"]').classList.remove("is-success");
+        document.querySelector('input[name="username"]').classList.add("is-danger");
+      } else {
+        errorElement.textContent = "Username available";
+        errorElement.classList.add("is-success");
+        errorElement.classList.remove("is-danger");
+      }
+    }, 500);
+  }
+
+  // Toggle password visibility for login form
   function togglePassword() {
     const pwd = document.getElementById('pwd');
     const icon = document.getElementById('eyeIcon');
@@ -170,9 +406,23 @@
       icon.classList.add("fa-eye");
     }
   }
+  
+  // Toggle password visibility for signup form
+  function toggleSignupPassword() {
+    const pwd = document.getElementById('signupPwd');
+    const icon = document.getElementById('signupEyeIcon');
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      pwd.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
 
-  document.getElementById('toggleEye').addEventListener('click', togglePassword);
-
+  // Form navigation functions
   function showSignUpForm() {
     document.getElementById('loginForm').style.display = "none";
     document.getElementById('signupForm').style.display = "block";
@@ -191,6 +441,7 @@
     document.getElementById('fg_psd').style.display = "block";
   }
 
+  // Toast notification function
   function showToast(message, type = 'success') {
     const toastId = 'toast_' + Date.now();
     const bgClass = type === 'success' ? 'bg-success' : 'bg-danger';
@@ -207,17 +458,47 @@
     toast.innerHTML = `
       <div class="d-flex">
         <div class="toast-body">${message}</div>
-        <button type="button" class="ml-2 mb-1 close btn-close btn-close-white" onclick="document.getElementById('${toastId}').remove();"></button>
+        <button type="button" class="ml-2 mb-1 close btn-close btn-close-white" onclick="document.getElementById('${toastId}').remove();">×</button>
       </div>
     `;
 
     document.getElementById('toastContainer').appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
+    setTimeout(() => {
+      const toastEl = document.getElementById(toastId);
+      if (toastEl) toastEl.remove();
+    }, 3000);
   }
 
+  // Validate form before submission
+  function validateForm(form) {
+    let isValid = true;
+    
+    // Validate each field in the form
+    for (const field of form.elements) {
+      if (field.name && field.required) {
+        // Skip buttons and other non-input elements
+        if (field.type !== 'submit' && field.type !== 'button') {
+          const fieldValid = validateField(field);
+          isValid = isValid && fieldValid;
+        }
+      }
+    }
+    
+    return isValid;
+  }
+
+  // Handle login form submission
   function handleLogin(event) {
     event.preventDefault();
     const form = document.getElementById("loginform");
+    const username = form.username.value.trim();
+    const password = form.password.value;
+    
+    if (!username || !password) {
+      showToast("Please enter both username and password", 'error');
+      return;
+    }
+    
     const formData = new FormData(form);
 
     fetch("user_login_php_conn.php", {
@@ -236,17 +517,18 @@
     });
   }
 
+  // Handle signup form submission
   document.getElementById("signupFormData").addEventListener("submit", function (event) {
     event.preventDefault();
+    
+    // Validate all fields before submission
+    if (!validateForm(this)) {
+      showToast("Please fix all errors before submitting", 'error');
+      return;
+    }
 
     const form = this;
     const formData = new FormData(form);
-    const mobileNo = form.mobile_no.value.trim();
-
-    if (!/^\d{10}$/.test(mobileNo)) {
-      showToast("Mobile number must be exactly 10 digits", 'error');
-      return;
-    }
 
     fetch("user_signup_php_conn.php", {
       method: "POST",
@@ -256,10 +538,24 @@
     .then(text => {
       try {
         const data = JSON.parse(text);
-        showToast(data.message, data.status);
-
-        if (data.status === "success") {
-          setTimeout(showLoginForm, 1500);
+        
+        // Handle validation errors from server
+        if (data.status === "error" && data.errors) {
+          // Display server-side validation errors
+          Object.keys(data.errors).forEach(field => {
+            const errorElement = document.getElementById(`error_${field}`);
+            if (errorElement) {
+              errorElement.textContent = data.errors[field];
+              document.querySelector(`[name="${field}"]`).classList.add("is-danger");
+            }
+          });
+          showToast("Please correct the errors", 'error');
+        } else {
+          // Show success or other error message
+          showToast(data.message, data.status);
+          if (data.status === "success") {
+            setTimeout(showLoginForm, 1500);
+          }
         }
       } catch (err) {
         console.error("Response parsing error:", text);
@@ -270,6 +566,37 @@
       console.error("Signup request failed:", err);
       showToast("Signup failed! Please try again.", 'error');
     });
+  });
+  
+  // Handle forgot password form submission
+  document.getElementById("forgotPasswordForm")?.addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const username = this.username.value.trim();
+    const email = this.email.value.trim();
+    
+    if (!username || !email) {
+      showToast("Please enter both username and email", 'error');
+      return;
+    }
+    
+    if (!/^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      document.getElementById("error_fp_email").textContent = "Invalid email format";
+      return;
+    }
+    
+    // Here you would typically send a request to your server
+    showToast("Password reset instructions sent to your email", 'success');
+    setTimeout(showLoginForm, 2000);
+  });
+
+  // Set up event listeners when the DOM is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    // Login eye icon
+    document.getElementById('toggleEye')?.addEventListener('click', togglePassword);
+    
+    // Signup eye icon 
+    document.getElementById('signupToggleEye')?.addEventListener('click', toggleSignupPassword);
   });
 </script>
 
